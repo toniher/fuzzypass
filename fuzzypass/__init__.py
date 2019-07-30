@@ -1,3 +1,3 @@
 from fuzzypass._version import __version__
 
-__all__ = ['inputparser']
+__all__ = ['inputparser', 'metrics']
