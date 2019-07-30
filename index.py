@@ -5,9 +5,10 @@ def main():
 
 	parser = inputparser.InputParser( "Tal", "Tal", "Tal" )
 	parser.read()
-	dist = metrics.DistPearson().calculate()
-	print( "R" )
-	print( dist )
+	pearson = metrics.DistPearson()
+	pearson.calculate()
+	print( pearson.distance )
+	print( pearson.rcoeff )
 
 if __name__== "__main__":
 	main()
