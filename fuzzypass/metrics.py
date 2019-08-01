@@ -93,6 +93,59 @@ class KDF:
 
 
     def calculate( self ):
+
+        ori = np.array(["A", "B", "C"])
+        other = np.array(["Z", "Y", "X"])
+        LQ = length( ori )
+        
+        
+        if LQ > 0 :
+        
+            FlQ = np.empty( LQ + 1 )
+            FlS = np.empty( LQ + 1 )
+        
+            if np.where(self.Rigid == ori[0]) > 0 :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[1])
+                FlQ[0] = Flx1R[AAFlexLoc]
+                
+            else :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[1])
+                FlQ[0] = Flx0R[AAFlexLoc]
+                
+        
+            if np.where(self.Rigid == other[0]) > 0 :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[1])
+                FlS[0] = Flx1R[AAFlexLoc]
+                
+            else :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[1])
+                FlS[0] = Flx0R[AAFlexLoc]
+        
+            if np.where(self.Rigid == ori[ LQ - 2 ]) > 0 :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[ LQ - 1 ])
+                FlQ[ LQ - 1 ] = Flx1R[AAFlexLoc]
+                
+            else :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[ LQ - 1 ])
+                FlQ[ LQ - 1 ] = Flx0R[AAFlexLoc]
+                
+            
+            if np.where(self.Rigid == other[ LQ - 2 ]) > 0 :
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[ LQ - 1 ])
+                FlS[ LQ - 1 ] = Flx1R[AAFlexLoc]
+                
+            else :
+                
+                AAFlexLoc = np.where(self.AAFlex == other[ LQ - 1 ])
+                FlS[ LQ - 1 ] = Flx0R[AAFlexLoc]  
+                
         
         print("Calculate")
         
@@ -122,13 +175,13 @@ class KDF:
 # 			   FlQ[0] = Flx0R[AAFlex.find(OriProt.substr(1,1))];
 # 			}
 # 	
-# 			if(Rigid.find(OtherProt.substr(0,1))>0){
+# 	if(Rigid.find(OtherProt.substr(0,1))>0){
 # 			   FlS[0] = Flx1R[AAFlex.find(OtherProt.substr(1,1))];
 # 			}
 # 	
 # 	else{
 # 			   FlS[0] = Flx0R[AAFlex.find(OtherProt.substr(1,1))];
-# 			}
+# 		}
 # 	
 # 			//-----------------------------------------------------------
 # 	//
