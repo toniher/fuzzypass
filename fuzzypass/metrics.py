@@ -74,8 +74,8 @@ class DistPearson:
 
 class KDF:
     
-    kd = -1
-    flex = -1
+    KD = -1
+    Flx = -1
     
     def __init__(self, ori=[], other=[], seqtype="prot"):
 
@@ -97,7 +97,8 @@ class KDF:
         ori = np.array(["A", "B", "C"])
         other = np.array(["Z", "Y", "X"])
         LQ = length( ori )
-        
+        Rig = 0
+        Dif  = 0
         
         if LQ > 0 :
         
@@ -145,140 +146,70 @@ class KDF:
                 
                 AAFlexLoc = np.where(self.AAFlex == other[ LQ - 1 ])
                 FlS[ LQ - 1 ] = Flx0R[AAFlexLoc]  
-                
-        
-        print("Calculate")
-        
-        
+            
+            
+            for i in range(1, LQ-1):
 
-# 
-# //Kye-Dolittle Function
-# //---------------------------------------------------------------------------
-# void KDF(string OriProt, string OtherProt, double &KD, double &Flx){
-# 
-# 	int i, LQ, Rig;
-# 	double Dif, *FlQ, *FlS, Query, Subje;
-# 	LQ   = string(OriProt).length();
-# 	Dif  = 0;
-# 
-# 	if(LQ>0){
-# 	
-# 			FlQ = (double *) calloc(LQ+1, sizeof(double));
-# 			FlS = (double *) calloc(LQ+1, sizeof(double));
-# 	
-# 			if(Rigid.find(OriProt.substr(0,1))>0){
-# 		
-# 			   FlQ[0] = Flx1R[AAFlex.find(OriProt.substr(1,1))];
-# 			}
-# 	
-# 	else{
-# 			   FlQ[0] = Flx0R[AAFlex.find(OriProt.substr(1,1))];
-# 			}
-# 	
-# 	if(Rigid.find(OtherProt.substr(0,1))>0){
-# 			   FlS[0] = Flx1R[AAFlex.find(OtherProt.substr(1,1))];
-# 			}
-# 	
-# 	else{
-# 			   FlS[0] = Flx0R[AAFlex.find(OtherProt.substr(1,1))];
-# 		}
-# 	
-# 			//-----------------------------------------------------------
-# 	//
-# 			if(Rigid.find(OriProt.substr(LQ-2,1))>0){
-# 			   FlQ[LQ-1] = Flx1R[AAFlex.find(OriProt.substr(LQ-1,1))];
-# 			}
-# 	
-# 	else{
-# 			   FlQ[LQ-1] = Flx0R[AAFlex.find(OriProt.substr(LQ-1,1))];
-# 			}
-# 	
-# 			if(Rigid.find(OtherProt.substr(LQ-2,1))>0){
-# 			   FlS[LQ-1] = Flx1R[AAFlex.find(OtherProt.substr(LQ-1,1))];
-# 			}
-# 
-# 	else{
-# 			   FlS[LQ-1] = Flx0R[AAFlex.find(OtherProt.substr(LQ-1,1))];
-# 			}
-# 
-# 			//-----------------------------------------------------------
-# 	//
-# 			for(i=1;i<(LQ-1);i++){
-# 		
-# 				//-------------------------------------------------------
-# 		//
-# 				if(Rigid.find(OtherProt.substr(i,1))>0){
-# 					Rig = 1;
-# 				}
-# 		
-# 		else{
-# 					Rig = 0;
-# 				}
-# 		
-# 				if(Rigid.find(OtherProt.substr(i+2,1))>0){
-# 					Rig++;
-# 				}
-# 		
-# 				switch (Rig) {
-# 			
-# 					case 0 :
-# 						 FlS[i] = Flx0R[AAFlex.find(OtherProt.substr(i+1,1))];
-# 						 break;
-# 					case 1 :
-# 						 FlS[i] = Flx1R[AAFlex.find(OtherProt.substr(i+1,1))];
-# 						 break;
-# 					case 2 :
-# 						 FlS[i] = Flx2R[AAFlex.find(OtherProt.substr(i+1,1))];
-# 						 break;
-# 				}
-# 		
-# 				//-------------------------------------------------------
-# 		//
-# 				if(Rigid.find(OriProt.substr(i,1))>0){
-# 					Rig = 1;
-# 				}
-# 		
-# 		else{
-# 					Rig = 0;
-# 				}
-# 				
-# 		if(Rigid.find(OriProt.substr(i+2,1))>0){
-# 					Rig++;
-# 				}
-# 		
-# 				switch (Rig) {
-# 					case 0 :
-# 						 FlQ[i] = Flx0R[AAFlex.find(OriProt.substr(i+1,1))];
-# 						 break;
-# 					case 1 :
-# 						 FlQ[i] = Flx1R[AAFlex.find(OriProt.substr(i+1,1))];
-# 						 break;
-# 					case 2 :
-# 						 FlQ[i] = Flx2R[AAFlex.find(OriProt.substr(i+1,1))];
-# 						 break;
-# 				}
-# 		
-# 				//-------------------------------------------------------
-# 				
-# 		Dif    = Dif+pow(KDp[AAKD.find(OriProt.substr(i+1,1))]
-# 								-KDp[AAKD.find(OtherProt.substr(i+1,1))],2);
-# 		}
-# 	
-# 			KD   = Dif /(double)LQ;
-# 			Dif  = 0;
-# 	
-# 			for(i=3;i<(LQ-3);i++){
-# 		
-# 				Query = 0.25*FlQ[i-3]+0.5*FlQ[i-2]+0.75*FlQ[i-1]+FlQ[i]+
-# 						0.25*FlQ[i+3]+0.5*FlQ[i+2]+0.75*FlQ[i+1];
-# 				Subje = 0.25*FlS[i-3]+0.5*FlS[i-2]+0.75*FlS[i-1]+FlS[i]+
-# 						0.25*FlS[i+3]+0.5*FlS[i+2]+0.75*FlS[i+1];
-# 				Dif   = Dif+pow((Query/4)-(Subje/4),2);
-# 			}
-# 	
-# 			Flx     = Dif /(double)LQ;
-# 		free(FlS);
-# 		free(FlQ);
-# 	}
-# }
+                if np.where(self.Rigid == ori[ i ]) > 0 :
+                    Rig = 1
+                else :
+                    Rig = 0
+        
+                if np.where(self.Rigid == ori[ i+2 ]) > 0 :
+                    Rig++;
+
+                
+                AAFlexLoc = np.where(self.AAFlex == ori[i+1])
+
+
+                if Rig == 0:
+                    FlQ[i] = Flx0R[AAFlexLoc]
+                    
+                if Rig == 1:
+                    FlQ[i] = Flx1R[AAFlexLoc]
+                    
+                if Rig == 2:
+                    FlQ[i] = Flx2R[AAFlexLoc]
+                    
+                
+
+                if np.where(self.Rigid == other[ i ]) > 0 :
+                    Rig = 1
+                else :
+                    Rig = 0
+        
+                if np.where(self.Rigid == other[ i+2 ]) > 0 :
+                    Rig++;
+
+                
+                AAFlexLoc = np.where(self.AAFlex == other[i+1])
+
+
+                if Rig == 0:
+                    FlS[i] = Flx0R[AAFlexLoc]
+                    
+                if Rig == 1:
+                    FlS[i] = Flx1R[AAFlexLoc]
+                    
+                if Rig == 2:
+                    FlS[i] = Flx2R[AAFlexLoc]
+                    
+
+                OriLoc = np.where(self.AAKD == ori[i+1])
+                OtherLoc = np.where(self.AAKD == other[i+1])
+                Dif = Dif+pow(KDp[OriLoc]-KDp[OtherLoc], 2)
+
+
+            KD = Dif / LQ
+            
+            Dif  = 0;
+
+            for i in range(3, LQ-3):
+                
+                Query = 0.25*FlQ[i-3]+0.5*FlQ[i-2]+0.75*FlQ[i-1]+FlQ[i]+0.25*FlQ[i+3]+0.5*FlQ[i+2]+0.75*FlQ[i+1]
+                Subje = 0.25*FlS[i-3]+0.5*FlS[i-2]+0.75*FlS[i-1]+FlS[i]+0.25*FlS[i+3]+0.5*FlS[i+2]+0.75*FlS[i+1]
+                Dif = Dif+pow((Query/4)-(Subje/4),2)
+
+            Flx = Dif / LQ
+
 
