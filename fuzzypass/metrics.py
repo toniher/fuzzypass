@@ -185,7 +185,6 @@ class KDF:
                 
                 if AAFlexLoc:
 
-    
                     if Rig == 0:
                         FlS[i] = self.Flx0R[AAFlexLoc]
                         
@@ -215,5 +214,4 @@ class KDF:
                 Dif = Dif + pow((Query/4)-(Subje/4),2)
 
             self.Flx = Dif / LQ
-
 
