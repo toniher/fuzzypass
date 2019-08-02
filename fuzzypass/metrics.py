@@ -11,8 +11,8 @@ class DistPearson:
         self.other = np.asarray( list( other ) )
         self.seqtype = seqtype
         
-        self.numdiv = 22;
         self.orddiv = np.asarray( list( "-ACDEFGHIKLMNPQRSTVWYX") )
+        self.numdiv = len( self.orddiv )
 
         self.X = 0
         self.Y = 0
@@ -29,6 +29,7 @@ class DistPearson:
         ori = self.ori
         other = self.other
         LQ = len( ori )
+        print( LQ )
           
         it = np.nditer(ori, flags=['f_index'])
         while not it.finished:
@@ -49,9 +50,7 @@ class DistPearson:
         
         if [ LQ > 11 ] :
             
-            for x in range(1, 22):
-                
-                print( self.orddiv[x] )
+            for x in range(1, self.numdiv):
                 
                 self.distance = self.distance + pow( self.other_acu[x]-self.ori_acu[x], 2 )
                 self.X = self.X + self.other_acu[x];
@@ -66,9 +65,7 @@ class DistPearson:
             if self.rcoeff > 0 :
                 self.rcoeff = ((20*self.XY)-(self.X*self.Y))/pow(self.rcoeff,0.5)
 
-        
-        print( self.ori_acu )
-        print( self.other_acu )
+            self.distance=pow(self.distance,0.5);
 
 class KDF:
     
