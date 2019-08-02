@@ -156,7 +156,7 @@ class KDF:
                     Rig = 0
         
                 if np.where(self.Rigid == ori[ i+2 ]) > 0 :
-                    Rig++;
+                    Rig = Rig + 1;
 
                 
                 AAFlexLoc = np.where(self.AAFlex == ori[i+1])
@@ -179,7 +179,7 @@ class KDF:
                     Rig = 0
         
                 if np.where(self.Rigid == other[ i+2 ]) > 0 :
-                    Rig++;
+                    Rig = Rig + 1;
 
                 
                 AAFlexLoc = np.where(self.AAFlex == other[i+1])
