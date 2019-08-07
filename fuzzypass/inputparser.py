@@ -42,7 +42,7 @@ class InputParser:
                     
                     print("No BLAST")
         
-        print( self.list_seqs )
+        #print( self.list_seqs )
         
     def handle_report( self, report ):
 

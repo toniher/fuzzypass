@@ -18,6 +18,8 @@ def main(args):
 	parser = inputparser.InputParser( args[1] )
 	parser.read()
 	
+	fuzzout = fuzzifier.FuzzyFier( {} )
+	fuzzout.calculate( parser.list_seqs )
 	
 	pearson = metrics.DistPearson( qseq, hseq )
 	pearson.calculate()
