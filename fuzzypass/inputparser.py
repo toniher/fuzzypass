@@ -54,7 +54,6 @@ class InputParser:
                                 
                 for i in range(0, len( report["results"]["iterations"] ) ):
                 
-                    print( "iter "+str( i ) )
                     iterations.append( self.handle_results( report["results"]["iterations"][i] ) )
                 
             else :
@@ -65,58 +64,65 @@ class InputParser:
     
     def handle_results( self, results ) :
         
-        hits = []
+        result = {}
+        
+        if "iter_num" in results :
+            result["iter_num"] = results["iter_num"]
         
         if "search" in results :
             
-            qtitle = None
-            qid = None
-            qlen = None
-            
             if "query_title" in results["search"] :
                 
-                qtitle = results["search"]["query_title"]
+                result["query_title"] = results["search"]["query_title"]
                 
             if "query_id" in results["search"] :
 
-                qid = results["search"]["query_id"]
+                result["query_id"] = results["search"]["query_id"]
 
             if "query_len" in results["search"] :
                 
-                qlen = int( results["search"]["query_len"] )
+                result["query_len"] = int( results["search"]["query_len"] )
+
 
             if "hits" in results["search"] :
+
+                result["hits"] = []
                 
                 for h in range(0, len( results["search"]["hits"] ) ) :
                     
+                    hstruct = {}
+
+                    hstruct["num"] = h + 1
+                    
                     hit = results["search"]["hits"][h]
                     
-                    desc_title = None
-                    desc_acc = None
-                    desc_id = None
-                    desc_taxid = None
-                    
-                    hit_len = 0
+                    result["hit_len"] = 0
                     
                     if "len" in hit :
-                        hit_len = hit["len"]
+                        result["hit_len"] = int( hit["len"] )
+                    
+                    hstruct["description"] = []
                     
                     if len( hit["description"] ) > 0 :
-                    
+                                        
                         # We take only the first one
                         desc = hit["description"][0]
                         
+                        dstruct = {}
+
                         if "title" in desc :
-                            desc_title = desc["title"]
+                            dstruct["title"] = desc["title"]
                         
                         if "accession" in desc :
-                            desc_acc = desc["accession"]
-                        
+                            dstruct["accession"] = desc["accession"]
+
                         if "id" in desc :
-                            desc_id = desc["id"]
+                            dstruct["id"] = desc["id"]
                         
                         if "taxid" in desc :
-                            desc_taxid = int( desc["taxid"] )
+                            dstruct["taxid"] = int( desc["taxid"] )
+                            
+                        hstruct["description"].append( dstruct )
 
 
                     if len( hit["hsps"] ) > 0 :
@@ -124,76 +130,76 @@ class InputParser:
                         # We take only the first one
                         hsp = hit["hsps"][0]
                         
-                        hsp_len = 0
+                        hstruct["length"] = 0
                         
                         if "align_len" in hsp :
-                            hsp_len = int( hsp["align_len"] )
+                            hstruct["length"] = int( hsp["align_len"] )
                             
                         if "qseq" in hsp :
                             
-                            hsp_qseq = hsp["qseq"]
+                            hstruct["qseq"] = hsp["qseq"]
 
                             
                         if "hseq" in hsp :
                             
-                            hsp_hseq = hsp["hseq"]
+                           hstruct["hseq"] = hsp["hseq"]
 
                             
                         if "qstart" in hsp :
                                                        
-                            hsp_qstart = int( hsp["query_from"] )
+                            hstruct["qstart"] = int( hsp["query_from"] )
 
                             
                         if "qend" in hsp :
                             
-                            hsp_qend = int( hsp["query_to"] )
+                            hstruct["qend"] = int( hsp["query_to"] )
 
                             
                         if "hstart" in hsp :
                             
-                            hsp_hstart = int( hsp["hit_from"] )
+                            hstruct["hstart"] = int( hsp["hit_from"] )
 
                         if "hend" in hsp :
                             
-                            hsp_hend = int( hsp["hit_to"] )
+                            hstruct["hend"] = int( hsp["hit_to"] )
                             
                         if "bits" in hsp :
                             
-                            hsp_bits = float( hsp["bit_score"] )
+                            hstruct["bits"] = float( hsp["bit_score"] )
                             
                         if "score" in hsp :
                             
-                            hsp_score = float( hsp["score"] )
+                            hstruct["score"] = float( hsp["score"] )
 
                             
                         if "evalue" in hsp :
                             
-                            hsp_evalue = float( hsp["evalue"] )
+                            hstruct["evalue"] = float( hsp["evalue"] )
 
                             
                         if "identical" in hsp :
                             
-                            hsp_identical = int( hsp["identity"] )
+                            hstruct["identical"] = int( hsp["identity"] )
 
                             
                         if "conserved" in hsp :
                             
-                            hsp_conserved = int( hsp["positive"] )
+                            hstruct["conserved"] = int( hsp["positive"] )
   
                             
                         if "mseq" in hsp :
                             
-                            hsp_mseq = hsp["midline"]
+                            hstruct["mseq"] = hsp["midline"]
 
                             
                         if "gaps" in hsp :
                             
-                            hsp_gaps = int( hsp["gaps"] )
+                            hstruct["gaps"] = int( hsp["gaps"] )
     
-                        if hsp_len == 0 :
+                        if hstruct["length"] == 0 :
                             
-                            hsp_len = hsp_hend - hsp_hstart + 1
+                            hstruct["length"] = hstruct["hend"] - hstruct["hstart"] + 1
 
-                    print( h )
-                    hits.append( h )
-        return hits
+                    result["hits"].append( hstruct )
+                    
+        return result
