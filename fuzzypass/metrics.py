@@ -2,8 +2,8 @@ import numpy as np
 
 class DistPearson:
     
-    distance = -1
-    rcoeff = -1
+    distance = 0
+    rcoeff = 0
     
     def __init__(self, ori="", other="", seqtype="prot"):
 
@@ -29,7 +29,6 @@ class DistPearson:
         ori = self.ori
         other = self.other
         LQ = len( ori )
-        print( LQ )
           
         it = np.nditer(ori, flags=['f_index'])
         while not it.finished:
