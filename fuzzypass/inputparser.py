@@ -99,7 +99,7 @@ class InputParser:
                     result["hit_len"] = 0
                     
                     if "len" in hit :
-                        result["hit_len"] = int( hit["len"] )
+                        hstruct["hit_len"] = int( hit["len"] )
                     
                     hstruct["description"] = []
                     
