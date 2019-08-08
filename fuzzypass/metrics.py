@@ -94,72 +94,72 @@ class KDF:
         Rig = 0
         Dif  = 0
         
+        # print( self.ori )
+        # print( LQ )
+        
         if LQ > 0 :
         
             FlQ = np.zeros( LQ + 1 )
             FlS = np.zeros( LQ + 1 )
         
             if len( np.where(self.Rigid == ori[0]) ) > 0 :
-                
                 AAFlexLoc = np.where(self.AAFlex == ori[1])[0]
                 FlQ[0] = self.Flx1R[AAFlexLoc]
-                
             else :
-                
                 AAFlexLoc = np.where(self.AAFlex == ori[1])[0]
                 FlQ[0] = self.Flx0R[AAFlexLoc]
-                
         
             if len( np.where(self.Rigid == other[0]) ) > 0 :
-                
-                AAFlexLoc = np.where(self.AAFlex == ori[1])[0]
+                AAFlexLoc = np.where(self.AAFlex == other[1])[0]
                 FlS[0] = self.Flx1R[AAFlexLoc]
-                
             else :
-                
-                AAFlexLoc = np.where(self.AAFlex == ori[1])[0]
+                AAFlexLoc = np.where(self.AAFlex == other[1])[0]
                 FlS[0] = self.Flx0R[AAFlexLoc]
-        
-            if len( np.where(self.Rigid == ori[ LQ - 2 ]) ) > 0 :
                 
+            if len( np.where(self.Rigid == ori[ LQ - 2 ]) ) > 0 :
                 AAFlexLoc = np.where(self.AAFlex == ori[ LQ - 1 ])[0]
                 FlQ[ LQ - 1 ] = self.Flx1R[AAFlexLoc]
                 
             else :
-                
                 AAFlexLoc = np.where(self.AAFlex == ori[ LQ - 1 ])[0]
                 FlQ[ LQ - 1 ] = self.Flx0R[AAFlexLoc]
                 
             
             if len( np.where(self.Rigid == other[ LQ - 2 ]) ) > 0 :
-                
-                AAFlexLoc = np.where(self.AAFlex == ori[ LQ - 1 ])[0]
+                AAFlexLoc = np.where(self.AAFlex == other[ LQ - 1 ])[0]
                 FlS[ LQ - 1 ] = self.Flx1R[AAFlexLoc]
                 
             else :
-                
                 AAFlexLoc = np.where(self.AAFlex == other[ LQ - 1 ])[0]
                 FlS[ LQ - 1 ] = self.Flx0R[AAFlexLoc]  
             
             
+            # print( str( FlQ[ LQ - 1 ] ) + "\t" + str( FlS[ LQ - 1 ] ) + "\n" )
+            
             for i in range(1, LQ-2):
 
-                if len( np.where(self.Rigid == ori[ i ]) ) > 0 :
+                # print( ori[i] )
+                # print( ori[i+2] )
+                if len( np.where(self.Rigid == ori[ i ])[0] ) > 0 :
                     Rig = 1
                 else :
                     Rig = 0
         
-                if len( np.where(self.Rigid == ori[ i+2 ]) ) > 0 :
+                # print( Rig )
+        
+                # print( ori[ i+2 ] )
+                if len( np.where(self.Rigid == ori[ i+2 ])[0] ) > 0 :
                     Rig = Rig + 1;
-
                 
-                #print ("*" + str( i ) )
-                #print( ori[i+1] )
+                
+                # print( Rig )
+
                 AAFlexLoc = np.where(self.AAFlex == ori[i+1])[0]
-                #print( AAFlexLoc )
-
+                # print( "ORI" )
+                # print( self.AAFlex[AAFlexLoc] )
+                
                 if AAFlexLoc:
-
+                    
                     if Rig == 0:
                         FlQ[i] = self.Flx0R[AAFlexLoc]
                         
@@ -169,19 +169,27 @@ class KDF:
                     if Rig == 2:
                         FlQ[i] = self.Flx2R[AAFlexLoc]
                         
-                    
-    
-                    if len( np.where(self.Rigid == other[ i ]) ) > 0 :
-                        Rig = 1
-                    else :
-                        Rig = 0
-            
-                    if len( np.where(self.Rigid == other[ i+2 ]) ) > 0 :
-                        Rig = Rig + 1;
-    
-                    
-                AAFlexLoc = np.where(self.AAFlex == other[i+1])[0]
+                # print( FlQ[i] )
+   
+                # print( other[ i ] )
+                # print( self.Rigid )
+                # print( np.where(self.Rigid == other[ i ])[0] )
+                if len( np.where(self.Rigid == other[ i ])[0] ) > 0 :
+                    Rig = 1
+                else :
+                    Rig = 0
+        
+                # print("Rig")
+                # print( Rig )
+                if len( np.where(self.Rigid == other[ i+2 ])[0] ) > 0 :
+                    Rig = Rig + 1;
+
                 
+                # print( Rig ) 
+                AAFlexLoc = np.where(self.AAFlex == other[i+1])[0]
+                # print( "OTHER" )
+                # print( self.AAFlex[AAFlexLoc] )
+
                 if AAFlexLoc:
 
                     if Rig == 0:
@@ -194,14 +202,21 @@ class KDF:
                         FlS[i] = self.Flx2R[AAFlexLoc]
                         
     
+                # print( str(i) + "\t" + str( FlS[i] ) )
                 OriLoc = np.where(self.AAKD == ori[i+1])[0]
                 OtherLoc = np.where(self.AAKD == other[i+1])[0]
                 
-                if OriLoc and OtherLoc :
+                # print( "* "+str( i ) )
+                # print( ori[i+1] + " $ " + other[i+1] )
+                # print( str( OriLoc ) + " * " + str( OtherLoc ) )
+                if OriLoc >= 0 and OtherLoc >= 0 :
+                    
+                    # print( "D:" + str( Dif ) )
 
                     Dif = Dif + pow(self.KDp[OriLoc]-self.KDp[OtherLoc], 2)
 
-
+            # print( LQ )
+            # print( "DIFF:" + str( Dif ) )
             self.KD = float( Dif / LQ )
             
             Dif  = 0;
@@ -210,7 +225,11 @@ class KDF:
                 
                 Query = 0.25*FlQ[i-3]+0.5*FlQ[i-2]+0.75*FlQ[i-1]+FlQ[i]+0.25*FlQ[i+3]+0.5*FlQ[i+2]+0.75*FlQ[i+1]
                 Subje = 0.25*FlS[i-3]+0.5*FlS[i-2]+0.75*FlS[i-1]+FlS[i]+0.25*FlS[i+3]+0.5*FlS[i+2]+0.75*FlS[i+1]
+
                 Dif = Dif + pow((Query/4)-(Subje/4),2)
 
             self.Flx = Dif / LQ
+            
+            # print( "F: " + str( self.Flx ) )
+            # print( )
 
