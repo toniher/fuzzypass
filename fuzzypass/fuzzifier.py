@@ -1,4 +1,5 @@
 from . import metrics
+import math
 
 class FuzzyFier:
     
@@ -69,6 +70,28 @@ class FuzzyFier:
             for i in range(0, len( self.list_fuzz[r] ) ):
 
                 for h in range(0, len( self.list_fuzz[r][i] ) ):
-                    
+
                     self.list_fuzz[r][i][h]["Fuz"] = 0
+
+                    if self.list_fuzz[r][i][h]["Dis"] == self.discarded_val :
+                        self.list_fuzz[r][i][h]["Fuz"] = 0
+                        self.list_fuzz[r][i][h]["Flx"] = self.discarded_val
+                        self.list_fuzz[r][i][h]["KD"] = self.discarded_val
+
+                    else :
+                    
+                        Len = 100*self.list_fuzz[r][i][h]["length"]/MaxVal
+                        EucDist = 100*self.list_fuzz[r][i][h]["Dis"]/DistMax
+                        Transm = 100-(100*self.list_fuzz[r][i][h]["Flx"]/FlxMax)
+                        KD = 100*self.list_fuzz[r][i][h]["KD"]/KDMax
+            
+                        if math.isnan(EucDist) or math.isnan(Transm) or math.isnan(KD) :
+                            self.list_fuzz[r][i][h]["Fuz"] = 0
+                        else :
+                            self.go_fuzzy( Len, EucDist, Transm, KD )
+
+    def go_fuzzy( self, Len, Eucdist, Transm, KD ) :
+        
+        print( "go_fuzzy" )
+
         
