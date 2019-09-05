@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 
 class InputParser:
     
@@ -13,6 +14,16 @@ class InputParser:
         
         print("Read file")
         print( self.filepath )
+        
+        if self.filetype == "pd" :
+        
+            with open(self.filepath, 'r') as f:
+                # TODO: Handle if not JSON
+                json_struct = json.load(f)
+                
+                df = pd.io.json.json_normalize(json_struct, record_path=['BlastOutput2', 'report', 'results', 'iterations', 'search', 'hits'], meta=[ [ 'version' ]  ]   )
+                print( df.head() )
+                
         
         if self.filetype == "json" :
 
